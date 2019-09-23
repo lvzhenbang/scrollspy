@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Progress Nav</title>
+
+  <meta name="description" content="">
+  <meta name="author" content="Hakim El Hattab">
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      position: fixed;
+      left: 3em;
+      top: 5em;
+      padding: 1em;
+      width: 14em;
+      line-height: 2;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav ul ul {
+      padding-left: 2em;
+    }
+
+    nav li a {
+      display: inline-block;
+      color: #aaa;
+      text-decoration: none;
+      -webkit-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    nav li.visible>a {
+      color: #111;
+      -webkit-transform: translate(5px);
+      -ms-transform: translate(5px);
+      transform: translate(5px);
+    }
+
+    .content {
+      margin-left: 16em;
+    }
+
+    .item {
+      height: 200px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="toc">
+    <ul>
+      <li><a data-target="intro">Intro</a></li>
+      <li>
+        <a data-target="dev">Developer Mode</a>
+        <ul>
+          <li><a data-target="dev-edit-html">Edit HTML</a></li>
+          <li><a data-target="dev-element-classes">Element Classes</a></li>
+          <li><a data-target="dev-slide-classes">Slide Classes</a></li>
+          <li><a data-target="dev-export-html">Export HTML</a></li>
+        </ul>
+      </li>
+      <li>
+        <a data-target="css">CSS Editor</a>
+        <ul>
+          <li><a data-target="css-fonts">Custom Fonts</a></li>
+          <li><a data-target="css-developer-mode">Developer Mode</a></li>
+          <li><a data-target="css-examples">Examples</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <article class="content">
+    <div id="intro" style="height: 800px;">
+      <h2>Introduction</h2>
+    </div>
+
+    <div id="dev" style="height: 600px;">
+      <h2>Developer Mode</h2>
+
+    </div>
+
+    <div id="dev-edit-html" style="height: 300px;">
+      <h3>Editing HTML</h3>
+
+    </div>
+
+    <div id="dev-element-classes" style="height: 300px;">
+      <h3>Element Classes</h3>
+
+    </div>
+
+    <div id="dev-slide-classes" style="height: 300px;">
+      <h3>Slide Classes</h3>
+
+    </div>
+
+    <div id="dev-export-html" style="height: 800px;">
+      <h3>Export HTML</h3>
+
+    </div>
+
+    <div id="css" style="height: 600px;">
+      <h2>CSS Editor</h2>
+
+    </div>
+    <div id="css-fonts" style="height: 300px;">
+      <h3>Custom Fonts</h3>
+
+    </div>
+    <div id="css-developer-mode" style="height: 600px;">
+      <h3>Developer Mode</h3>
+
+    </div>
+
+    <div id="css-examples" style="height: 1000px;">
+      <h3>Examples</h3>
+    </div>
+  </article>
+  <script>
+    var items = document.querySelector('ul').querySelectorAll('a');
+    var mapObj = {};
+
+    var observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0) {
+          mapObj[entry.target.outerHTML].parentNode.classList.add('visible');
+        } else {
+          mapObj[entry.target.outerHTML].parentNode.classList.remove('visible');
+        }
+      });
+    });
+    items.forEach((item) => {
+      var target = document.querySelector(`#${item.dataset.target}`);
+      mapObj[target.outerHTML] = item;
+      item.addEventListener('click', () => {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      })
+      observer.observe(target);
+    });
+  </script>
+
+</body>
+
+</html>

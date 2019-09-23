@@ -1,0 +1,19 @@
+{
+  "name": "scrollspy",
+  "version": "1.0.0",
+  "description": "* [` scrollspy `](https://lvzhenbang.github.io/scrollspy/dist/scrollspy)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvzhenbang/scrollspy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lvzhenbang/scrollspy/issues"
+  },
+  "homepage": "https://github.com/lvzhenbang/scrollspy#readme"
+}
