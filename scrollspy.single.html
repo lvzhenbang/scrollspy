@@ -145,39 +145,37 @@
     var items = document.querySelector('ul').querySelectorAll('a');
     var mapObj = {};
     var targetArr = [];
+    window.location.hash = items[0].dataset.target;
+    items[0].parentNode.classList.add('visible');
 
-    // var observer = new IntersectionObserver((entries) => {
-    //   entries.forEach((entry) => {
-    //     if (entry.isIntersecting && entry.intersectionRatio > 0) {
-    //       mapObj[entry.target.outerHTML].parentNode.classList.add('visible');
-    //       window.location.hash = mapObj[entry.target.outerHTML].dataset.target;
-    //     } else {
-    //       mapObj[entry.target.outerHTML].parentNode.classList.remove('visible');
-    //     }
-    //   });
-    // });
-
-    items.forEach((item) => {
-      const hashName = item.dataset.target;
-      var target = document.querySelector(`.${hashName}`);
-      mapObj[target.outerHTML] = item;
-      item.addEventListener('click', () => {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-        window.location.hash = hashName;
+    items.forEach(item => {
+      var target = document.querySelector(`.${item.dataset.target}`);
+      item.addEventListener('click', e => {
+        targetScroll(target);
       });
-      // observer.observe(target);
+      mapObj[target.outerHTML] = item;
       targetArr.push(target);
     });
+
+    function targetScroll(target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      window.location.hash = target.className;
+    }
+
+    window.addEventListener('hashchange', hashHandler);
+
+    function hashHandler() {
+      targetScroll(document.querySelector(`.${window.location.hash.slice(1)}`));
+    }
     
-    window.addEventListener('scroll', (e) => {
-      targetArr.forEach((item) => {
+    window.addEventListener('scroll', e => {
+      targetArr.forEach(item => {
         const itemClientRect = item.getBoundingClientRect();
         if (itemClientRect.top >= -itemClientRect.height + 10 && itemClientRect.top <= 10) {
           mapObj[item.outerHTML].parentNode.classList.add('visible');
-          window.location.hash = mapObj[item.outerHTML].dataset.target;
         } else {
           mapObj[item.outerHTML].parentNode.classList.remove('visible');
         }
