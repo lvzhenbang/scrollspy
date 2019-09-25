@@ -156,6 +156,7 @@
     //     }
     //   });
     // });
+
     items.forEach((item) => {
       const hashName = item.dataset.target;
       var target = document.querySelector(`.${hashName}`);
@@ -165,6 +166,7 @@
           behavior: 'smooth',
           block: 'start'
         });
+        window.location.hash = hashName;
       });
       // observer.observe(target);
       targetArr.push(target);
@@ -175,6 +177,7 @@
         const itemClientRect = item.getBoundingClientRect();
         if (itemClientRect.top >= -itemClientRect.height + 10 && itemClientRect.top <= 10) {
           mapObj[item.outerHTML].parentNode.classList.add('visible');
+          window.location.hash = mapObj[item.outerHTML].dataset.target;
         } else {
           mapObj[item.outerHTML].parentNode.classList.remove('visible');
         }
