@@ -169,6 +169,11 @@
       targetObj[item.outerHTML] = target;
     });
 
+    const hashName = window.location.hash && window.location.hash.slice(1);
+    if (hashName) {
+      activeItem = itemObj[document.querySelector(`.${hashName}`).outerHTML];
+    }
+
     window.addEventListener('hashchange', hashHandler);
     window.addEventListener('wheel', scrollHandler);
 
