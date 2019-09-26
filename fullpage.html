@@ -148,6 +148,7 @@
   </article>
   <script>
     let items = document.querySelector('ul').querySelectorAll('a');
+    let itemObj = {};
     let targetObj = {};
 
     let activeItem = items[0];
@@ -157,12 +158,12 @@
     window.location.hash = items[0].dataset.target;
     items[0].parentNode.classList.add('visible');
 
-    items.forEach((item, index) => {
+    items.forEach(item => {
       let target = document.querySelector(`.${item.dataset.target}`);
       item.addEventListener('click', e => {
         targetScroll(target);
-        setActiveItem(item, index);
       });
+      itemObj[target.outerHTML] = item;
       targetObj[item.outerHTML] = target;
     });
 
@@ -174,45 +175,44 @@
         behavior: 'smooth',
         block: 'start'
       });
+      setActiveItem(itemObj[target.outerHTML]);
       window.location.hash = target.className;
     }
 
     function hashHandler() {
       window.removeEventListener('wheel', scrollHandler);
-      targetScroll(document.querySelector(`.${window.location.hash.slice(1)}`));
+      const target = document.querySelector(`.${window.location.hash.slice(1)}`);
+      targetScroll(target);
       window.addEventListener('wheel', scrollHandler);
     }
 
-    function setActiveItem(item, index) {
+    function setActiveItem(item) {
       activeItem.parentNode.classList.remove('visible');
-      activeIndex = index;
       activeItem = item;
       activeItem.parentNode.classList.add('visible');
     }
 
     function scrollHandler(e) {
       const curTime = new Date().getTime();
-      let currentIndex = activeIndex;
       let timeDiff = curTime - prevTime;
       prevTime = curTime;
 
       if (timeDiff > 200) {
         if (e.wheelDelta < 0) {
-          currentIndex += 1;
-          if (currentIndex > items.length - 1) {
-            currentIndex = items.length - 1
+          activeIndex += 1;
+          if (activeIndex > items.length - 1) {
+            activeIndex = items.length - 1
           }
         }
         
         if (e.wheelDelta > 0) {
-          currentIndex -= 1;
-          if (currentIndex < 0) {
-            currentIndex = 0;
+          activeIndex -= 1;
+          if (activeIndex < 0) {
+            activeIndex = 0;
           }
         }
 
-        setActiveItem(items[currentIndex], currentIndex);
-        targetScroll(targetObj[activeItem.outerHTML]);
+        targetScroll(targetObj[items[activeIndex].outerHTML]);
       }
     }
   </script>
