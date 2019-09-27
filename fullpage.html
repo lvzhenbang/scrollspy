@@ -24,26 +24,22 @@
       overflow: hidden;
     }
 
-    nav {
+    .nav {
       position: fixed;
-      left: 3em;
+      left: 1em;
       top: 5em;
       padding: 1em;
-      width: 14em;
+      width: 10em;
       line-height: 2;
     }
 
-    nav ul {
+    .nav {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    nav ul ul {
-      padding-left: 2em;
-    }
-
-    nav li a {
+    .nav li a {
       display: inline-block;
       color: #aaa;
       text-decoration: none;
@@ -51,15 +47,19 @@
       transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    nav li.visible>a {
+    .nav li.visible>a {
       color: #111;
       -webkit-transform: translate(5px);
       -ms-transform: translate(5px);
       transform: translate(5px);
     }
 
+    .section {
+      width: 100%;
+      height: 100vh;
+    }
     .content {
-      margin-left: 16em;
+      margin-left: 11em;
     }
 
     .item {
@@ -67,112 +67,75 @@
     }
   </style>
   <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?5841e614267dc11b86bc8789d5842593";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
+    // var _hmt = _hmt || [];
+    // (function() {
+    //   var hm = document.createElement("script");
+    //   hm.src = "https://hm.baidu.com/hm.js?5841e614267dc11b86bc8789d5842593";
+    //   var s = document.getElementsByTagName("script")[0]; 
+    //   s.parentNode.insertBefore(hm, s);
+    // })();
   </script>
 </head>
 
 <body>
-  <nav>
-    <ul>
-      <li><a data-target="intro">Intro</a></li>
-      <li>
-        <a data-target="dev">Developer Mode</a>
-        <ul>
-          <li><a data-target="dev-edit-html">Edit HTML</a></li>
-          <li><a data-target="dev-element-classes">Element Classes</a></li>
-          <li><a data-target="dev-slide-classes">Slide Classes</a></li>
-          <li><a data-target="dev-export-html">Export HTML</a></li>
-        </ul>
-      </li>
-      <li>
-        <a data-target="css">CSS Editor</a>
-        <ul>
-          <li><a data-target="css-fonts">Custom Fonts</a></li>
-          <li><a data-target="css-developer-mode">Developer Mode</a></li>
-          <li><a data-target="css-examples">Examples</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-
   <article class="content">
-    <div class="intro" style="height: 100vh;">
+    <div class="section" data-anchor="intro" data-title="Introduction">
       <h2>Introduction</h2>
     </div>
 
-    <div class="dev" style="height: 100vh;">
+    <div class="section" data-anchor="dev" data-title="Developer Mode">
       <h2>Developer Mode</h2>
 
     </div>
 
-    <div class="dev-edit-html" style="height: 100vh;">
+    <div class="section" data-anchor="dev-edit-html" data-title="Edit HTML">
       <h3>Editing HTML</h3>
 
     </div>
 
-    <div class="dev-element-classes" style="height: 100vh;">
+    <div class="section" data-anchor="dev-element-classes" data-title="Element Classes">
       <h3>Element Classes</h3>
 
     </div>
 
-    <div class="dev-slide-classes" style="height: 100vh;">
+    <div class="section" data-anchor="dev-slide-classes" data-title="Slide Classes">
       <h3>Slide Classes</h3>
 
     </div>
 
-    <div class="dev-export-html" style="height: 100vh;">
+    <div class="section" data-anchor="dev-export-html" data-title="Export HTML">
       <h3>Export HTML</h3>
 
     </div>
 
-    <div class="css" style="height: 100vh;">
+    <div class="section" data-anchor="css" data-title="CSS Editor">
       <h2>CSS Editor</h2>
 
     </div>
-    <div class="css-fonts" style="height: 100vh;">
+    <div class="section" data-anchor="css-fonts" data-title="Custom Fonts">
       <h3>Custom Fonts</h3>
 
     </div>
-    <div class="css-developer-mode" style="height: 100vh;">
-      <h3>Developer Mode</h3>
+    <div class="section" data-anchor="css-developer-mode" data-title="CSS Developer Mode">
+      <h3>CSS Developer Mode</h3>
 
     </div>
 
-    <div class="css-examples" style="height: 100vh;">
+    <div class="section" data-anchor="css-examples" data-title="Examples">
       <h3>Examples</h3>
     </div>
   </article>
   <script>
-    let items = document.querySelector('ul').querySelectorAll('a');
+    let sections = document.querySelectorAll('.section');
     let itemObj = {};
-    let targetObj = {};
 
-    let activeItem = items[0];
-    let activeIndex = 0;
+    let activeItem = null;
+    let activeIndex = NaN;
     let prevTime = new Date().getTime();
 
-    window.location.hash = items[0].dataset.target;
-    items[0].parentNode.classList.add('visible');
-
-    items.forEach(item => {
-      let target = document.querySelector(`.${item.dataset.target}`);
-      item.addEventListener('click', e => {
-        targetScroll(target);
-      });
-      itemObj[target.outerHTML] = item;
-      targetObj[item.outerHTML] = target;
-    });
-
-    const hashName = window.location.hash && window.location.hash.slice(1);
-    if (hashName) {
-      activeItem = itemObj[document.querySelector(`.${hashName}`).outerHTML];
-    }
+    genNav();
+    // initial page
+    hashHandler();
 
     window.addEventListener('hashchange', hashHandler);
     window.addEventListener('wheel', scrollHandler);
@@ -183,20 +146,51 @@
         block: 'start'
       });
       setActiveItem(itemObj[target.outerHTML]);
-      window.location.hash = target.className;
+      window.location.hash = target.dataset.anchor;
+    }
+
+
+    function genNav() {
+      const ul = document.createElement('ul');
+      ul.classList.add('nav');
+      sections.forEach((section, index) => {
+        section.classList.add(section.dataset.anchor);
+        section.dataset.idx = index;
+
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.innerText = section.dataset.title;
+
+        li.appendChild(a);
+
+        li.addEventListener('click', e => {
+          targetScroll(section);
+        });
+        itemObj[section.outerHTML] = li;
+
+        ul.appendChild(li);
+      });
+      document.body.appendChild(ul);
     }
 
     function hashHandler() {
       window.removeEventListener('wheel', scrollHandler);
-      const target = document.querySelector(`.${window.location.hash.slice(1)}`);
+     
+      const hashName = window.location.hash.slice(1);
+      let target = document.querySelector(`.${hashName}`);
+
+      if (!target) target = sections[0];
+
+      activeIndex = parseInt(target.dataset.idx, 10);
+
       targetScroll(target);
       window.addEventListener('wheel', scrollHandler);
     }
 
     function setActiveItem(item) {
-      activeItem.parentNode.classList.remove('visible');
+      activeItem && activeItem.classList.remove('visible');
       activeItem = item;
-      activeItem.parentNode.classList.add('visible');
+      activeItem.classList.add('visible');
     }
 
     function scrollHandler(e) {
@@ -207,8 +201,8 @@
       if (timeDiff > 200) {
         if (e.wheelDelta < 0) {
           activeIndex += 1;
-          if (activeIndex > items.length - 1) {
-            activeIndex = items.length - 1
+          if (activeIndex > sections.length - 1) {
+            activeIndex = sections.length - 1
           }
         }
         
@@ -219,7 +213,7 @@
           }
         }
 
-        targetScroll(targetObj[items[activeIndex].outerHTML]);
+        targetScroll(sections[activeIndex]);
       }
     }
   </script>
