@@ -177,7 +177,7 @@
       window.removeEventListener('wheel', scrollHandler);
      
       const hashName = window.location.hash.slice(1);
-      let target = document.querySelector(`.${hashName}`);
+      let target = hashName && document.querySelector(`.${hashName}`);
 
       if (!target) target = sections[0];
 
